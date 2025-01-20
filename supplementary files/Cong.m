@@ -1,0 +1,35 @@
+clear;clc;
+ load('Cong.mat')
+lambda=[20.1:5:60.1];
+mu=s;r=1;T_min=0.0;T_max=2;p=15;
+R_0=10^(-5);d=2;s_max=4;s_min=0.5;
+theta=1.5;xi=0.1;sig=9.4192;phi=2.5;Pt=2;
+rho=lambda.*r./(m.*mu);
+DMR1=m.*lambda.^m.*(exp(-(m.*s./r-lambda).*T_min)-exp(-(m.*s./r-lambda).*T_max));
+DMR2=(s./r).^(m-1).*(m.*s./r-lambda).^2.*(T_max-T_min).*((sqrt(2.*pi.*m).*(m./exp(1)).^m).*(exp(m.*rho))+((m.*rho).^m./(1-rho)));
+DMR=DMR1./DMR2;
+R=R_0.*10.^(d.*(s_max-s)./(s_max-s_min));
+R_exp=m.*s.*(2./(m.*s+R.*r)-1./(m.*s+2.*R.*r));
+V_SLA=1-(1-DMR).*R_exp;
+E=lambda.*p.*r.*(1-DMR).*R_exp;
+C=m.*(theta+xi.*(rho.*sig.*s.^phi+Pt));
+P=E-C;
+%%
+lambda=[20:5:60];
+% F=[54.6704;117.2425;178.0219;239.0573;300.246;361.5378;422.9025];
+M=[12.3,17.8,23.22,28.59,33.93,39.25];
+S=[1.0474,1.0310,1.0209,1.0140,1.0088,1.0048];
+% plot(lambda,F)
+f=12.25.*lambda-5.976
+m=1.077.*lambda+1.611
+s=0.09846.*exp(-0.1234.*lambda)+1.025.*exp(-0.0006055.*lambda)
+mu=s;r=1;T_min=0;T_max=0.5;p=15;
+R_0=10^(-5);d=2;s_max=4;s_min=0.5;
+theta=1.5;xi=0.1;sig=9.4192;phi=2.5;Pt=2;
+rho=lambda.*r./(m.*mu);
+DMR1=m.*lambda.^m.*(exp(-(m.*s./r-lambda).*T_min)-exp(-(m.*s./r-lambda).*T_max));
+DMR2=(s./r).^(m-1).*(m.*s./r-lambda).^2.*(T_max-T_min).*((sqrt(2.*pi.*m).*(m./exp(1)).^m).*(exp(m.*rho))+((m.*rho).^m./(1-rho)));
+DMR=DMR1./DMR2;
+R=R_0.*10.^(d.*(s_max-s)./(s_max-s_min));
+R_exp=m.*s.*(2./(m.*s+R.*r)-1./(m.*s+2.*R.*r));
+E=1-(1-DMR).*R_exp;

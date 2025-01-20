@@ -1,0 +1,43 @@
+function score = objectiveFunction(x,net)
+m=x(1);
+mu=x(2);
+n=x(3);
+r=1;
+D_min=0.5;
+D_max=5;
+var=15;
+w=0.5;
+mu_max=4;
+mu_min=0.5;
+delta=0.01;
+alpha_0=10^(-5);
+eta=2;
+beta_1=1.5;
+beta_2=15;
+siga=0.1;
+Pst=2;
+theta=2.5;
+zeta=9.4192;
+lambda=30.1;
+rho=lambda.*r./(m.*mu);
+if rho<1
+    Im=(1-rho)./(sqrt(2.*pi.*m).*(1-rho).*(exp(rho)./(exp(1).*rho)).^m+1);
+    A=exp(D_max./w)./(exp(D_max/w)-exp(D_min/w));
+    B=1./(exp(D_max/w)-exp(D_min/w));
+    E1=1-Im./(1-rho).*exp(-(1-rho).*m.*mu.*D_min);
+    E2=A.*Im./(1-rho).*(exp(-(1-rho).*m.*mu.*D_min)-exp(-(1-rho).*m.*mu.*D_max));
+    E3=B.*m.*mu.*Im./(-(1-rho).*m.*mu+1/w).*(exp((-(1-rho).*m.*mu+1/w).*D_min)-exp((-(1-rho).*m.*mu+1/w).*D_max));
+    E=(E1+E2+E3).*var.*r.*lambda;
+    alpha=alpha_0.*10^(eta.*(mu_max-mu)./(mu_max-mu_min));
+    gamma=m.*alpha;
+    H=net([x(1);x(2);x(3)]);
+    barN=gamma.*H;
+    C_rent=(m+n).*beta_1+barN.*beta_2./delta;
+    C_ele=siga.*((m+n+barN./delta).*Pst+lambda.*r.*zeta.*mu.^(theta-1));
+    C=C_rent+C_ele;
+else
+    E=0;
+    C=0;
+end
+score=-(E-C);
+end
